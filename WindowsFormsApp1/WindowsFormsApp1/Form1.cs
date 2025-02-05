@@ -12,6 +12,9 @@ namespace WindowsFormsApp1
 {
     public partial class LoginForm : Form
     {
+        private Form2 form2;
+
+        
         public LoginForm()
         {
             InitializeComponent();
@@ -29,12 +32,25 @@ namespace WindowsFormsApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
+            string username = "admin";
+            string password = "admin";
+
+            if (textBox1.Text == username&& textBox2.Text == password)
+            {
+                form2 = new Form2();
+                form2.Show();
+                this.Hide();
+            }
+            else {
+                MessageBox.Show("Invald Credencials", "ERROR",MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            textBox1.Clear();
+            textBox2.Clear();
         }
 
         private void label3_Click(object sender, EventArgs e)
