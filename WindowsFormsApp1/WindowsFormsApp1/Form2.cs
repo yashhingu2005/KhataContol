@@ -12,6 +12,7 @@ namespace WindowsFormsApp1
 {
     public partial class Form2 : Form
     {
+        private Form3 form3;
         public Form2()
         {
             InitializeComponent();
@@ -24,7 +25,9 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            form3 = new Form3();
+            form3.Show();
+            this.Hide();
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)

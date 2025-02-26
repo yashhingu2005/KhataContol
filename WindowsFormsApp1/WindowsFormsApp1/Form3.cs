@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -19,12 +21,120 @@ namespace WindowsFormsApp1
 
         private void Form3_Load(object sender, EventArgs e)
         {
+            dataGridView1.Columns.Add("transaction_id", "Transaction ID");
+            dataGridView1.Columns.Add("items", "Item");
+            dataGridView1.Columns.Add("amount", "Amount");
 
+
+            string query = "SELECT customer_id, customer_name FROM Customers";
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["KhataDBConnection"].ConnectionString))
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                listView1.Items.Clear();
+
+                while (reader.Read())
+                {
+                    int customerId = (int)reader["customer_id"];
+                    string customerName = reader["customer_name"].ToString();
+
+                    // Create a ListViewItem, store customer_id in Tag
+                    ListViewItem item = new ListViewItem(customerName);
+                    item.Tag = customerId;
+
+                    listView1.Items.Add(item);
+                }
+            }
         }
 
         private void DASHBOARD_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                // Get customer_id from Tag
+                int selectedCustomerId = (int)listView1.SelectedItems[0].Tag;
+
+                // Clear previous dues
+                dataGridView1.Rows.Clear();
+
+                // Fetch dues from the database for the selected customer_id
+                string query = "SELECT transaction_id, items, amount FROM Transactions WHERE customer_id = @customerId AND status = 'Pending'";
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["KhataDBConnection"].ConnectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@customerId", selectedCustomerId);
+
+                    conn.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    // Loop through the dues and add them to DataGridView
+                    while (reader.Read())
+                    {
+                        int transactionId = (int)reader["transaction_id"];
+                        string itemName = reader["items"].ToString();
+                        decimal amount = (decimal)reader["amount"];
+
+                        dataGridView1.Rows.Add(transactionId, itemName, amount);
+                    }
+
+                    if (dataGridView1.Rows.Count == 1)
+                    {
+                        dataGridView1.Visible = false;
+                        panel3.Visible = true;
+                    }
+                    else {
+                        dataGridView1.Visible = true;
+                        panel3.Visible = false;
+                    }
+                }
+            }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0 && dataGridView1.SelectedRows.Count > 0)
+            {
+                int selectedCustomerId = (int)listView1.SelectedItems[0].Tag;
+
+                // Loop through selected dues and mark them as paid
+                foreach (DataGridViewRow selectedRow in dataGridView1.SelectedRows)
+                {
+                    int transactionId = (int)selectedRow.Cells["transaction_id"].Value;
+
+                    // Update transaction status in the database
+                    string query = "UPDATE Transactions SET status = 'paid' WHERE transaction_id = @transactionId";
+
+                    using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["KhataDBConnection"].ConnectionString))
+                    {
+                        SqlCommand cmd = new SqlCommand(query, conn);
+                        cmd.Parameters.AddWithValue("@transactionId", transactionId);
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // Remove the row from the DataGridView
+                    dataGridView1.Rows.Remove(selectedRow);
+                }
+
+                MessageBox.Show("Selected dues cleared.");
+            }
+            else
+            {
+                MessageBox.Show("Please select a customer and due first.");
+            }
         }
     }
 }
