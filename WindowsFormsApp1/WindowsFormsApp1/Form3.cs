@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,6 +15,8 @@ namespace WindowsFormsApp1
 {
     public partial class Form3 : Form
     {
+
+        private Form2 form2;
         public Form3()
         {
             InitializeComponent();
@@ -89,7 +92,8 @@ namespace WindowsFormsApp1
                         dataGridView1.Visible = false;
                         panel3.Visible = true;
                     }
-                    else {
+                    else
+                    {
                         dataGridView1.Visible = true;
                         panel3.Visible = false;
                     }
@@ -134,6 +138,69 @@ namespace WindowsFormsApp1
             else
             {
                 MessageBox.Show("Please select a customer and due first.");
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            form2 = new Form2();
+            form2.Show();
+            this.Hide();
+            this.Hide();
+        }
+
+        private void SendEmail(string recipientEmail, string customerName)
+        {
+            try
+            {
+                // Set up the email message
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("yhingu2005@gmail.com");  // Sender's email
+                mail.To.Add(recipientEmail);                            // Customer's email
+                mail.Subject = "Pending Transaction Notification";
+                mail.Body = $"Dear {customerName},\n\nYou have a pending transaction. Please clear it as soon as possible.";
+
+                // Set up the SMTP client
+                SmtpClient smtpClient = new SmtpClient("smtp.your-email-provider.com");
+                smtpClient.Port = 587;
+                smtpClient.Credentials = new System.Net.NetworkCredential("yhingu2005@gmail.com", "mzwc mivy twzl ujtw");
+                smtpClient.EnableSsl = true;
+
+                // Send the email
+                smtpClient.Send(mail);
+
+                Console.WriteLine("Notification sent to " + customerName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error sending email: " + ex.Message);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Database connection
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["KhataDBConnection"].ConnectionString))
+            {
+                conn.Open();
+
+                // SQL query to fetch customers with pending transactions
+                string query = "SELECT c.customer_name, c.email FROM Customers c " +
+                               "JOIN Transactions t ON c.customer_id = t.customer_id " +
+                               "WHERE t.status = 'Pending'";
+
+                SqlCommand command = new SqlCommand(query, conn);
+                SqlDataReader reader = command.ExecuteReader();
+
+                // Loop through customers and send notification
+                while (reader.Read())
+                {
+                    string customerName = reader["customer_name"].ToString();
+                    string email = reader["email"].ToString();
+
+                    // Send email
+                    SendEmail(email, customerName);
+                }
             }
         }
     }

@@ -46,3 +46,6 @@ C:\Users\Admin\Documents\projects\Khata Control\WindowsFormsApp1\WindowsFormsApp
 C:\Users\Admin\Documents\projects\Khata Control\WindowsFormsApp1\WindowsFormsApp1\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\Admin\Documents\projects\Khata Control\WindowsFormsApp1\WindowsFormsApp1\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\Admin\Documents\projects\Khata Control\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsF.A1EEDF9B.Up2Date
+C:\Users\Admin\Documents\projects\Khata Control\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form4.resources
+C:\Users\Admin\Documents\projects\Khata Control\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form5.resources
+C:\Users\Admin\Documents\projects\Khata Control\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form6.resources

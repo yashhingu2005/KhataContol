@@ -35,6 +35,7 @@
             this.DASHBOARD = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
             this.userControl11 = new WindowsFormsApp1.UserControl1();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -43,6 +44,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel1.Controls.Add(this.button4);
             this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.button1);
@@ -62,8 +64,9 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(171, 34);
             this.button3.TabIndex = 3;
-            this.button3.Text = "ADD CUSTOMER";
+            this.button3.Text = "ADD TRANSACTION";
             this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button2
             // 
@@ -77,6 +80,7 @@
             this.button2.TabIndex = 2;
             this.button2.Text = "TRANSACTIONS";
             this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -126,6 +130,20 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "NOTIFICATIONS";
             // 
+            // button4
+            // 
+            this.button4.AutoSize = true;
+            this.button4.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.button4.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.ForeColor = System.Drawing.SystemColors.Info;
+            this.button4.Location = new System.Drawing.Point(23, 221);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(171, 34);
+            this.button4.TabIndex = 4;
+            this.button4.Text = "ADD CUSTOMERS";
+            this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // userControl11
             // 
             this.userControl11.Location = new System.Drawing.Point(21, 75);
@@ -161,5 +179,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label1;
         private UserControl1 userControl11;
+        private System.Windows.Forms.Button button4;
     }
 }
